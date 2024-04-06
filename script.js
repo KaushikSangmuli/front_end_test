@@ -43,7 +43,7 @@ start.addEventListener("click", () => {
     option4.innerText=setOfQuestions[currentQuestion-1].option4;
     rightAnswer.innerText=setOfQuestions[currentQuestion-1].correctAnswer;
 })
-
+let isNextTimerReload=false;
 // background and countdown value for first question
 start.addEventListener( "click" , ()=>{
   pageBGColor.style.backgroundColor ="rgba(204, 226, 194, 1)"
@@ -52,6 +52,8 @@ start.addEventListener( "click" , ()=>{
     pageBGColor.style.backgroundColor ="rgba(219, 173, 173, 1)"
     pageBGColor.style.transition = "60s"
   }, 1000);
+  
+  countDownValue=60
   const stopCountDown1 = setInterval(() => {
     countDownValue--
     let formattedValue= String(countDownValue).padStart(2, "0")
@@ -61,6 +63,7 @@ start.addEventListener( "click" , ()=>{
       clearInterval(stopCountDown1)
     }
   }, 1000);
+  isNextTimerReload=true;
 })
 
 
@@ -284,42 +287,76 @@ const setOfQuestions = [
 
   // event on option selection
 isOptionSelected = false      // to prevent multiple selection
-options.forEach((option) =>{
-  optedOption.forEach((opt) => {
-    opt.addEventListener("click", ()=>{
+// options.forEach((option) =>{
+//   optedOption.forEach((opt) => {
+//     opt.addEventListener("click", ()=>{
 
-      if ( isOptionSelected){
-          return;                           //if option selected directly end the event
-      }
+//       if ( isOptionSelected){
+//           return;                           //if option selected directly end the event
+//       }
 
-      options.forEach((option)=>{
-        option.classList.remove("border-right", "border-wrong")   // previous Q's border removed
-      })
+//       options.forEach((option)=>{
+//         option.classList.remove("border-right", "border-wrong")   // previous Q's border removed
+//       })
 
-      //answer checking through if else
-      if ( opt.textContent == rightAnswer.textContent) {
-        opt.parentElement.classList.add("border-right")
-        opt.nextElementSibling.nextElementSibling.classList.remove("hidden")
-        scoreCount++;
-        localStorage.setItem("score" , scoreCount)
-        console.log("score is " , scoreCount)
-       } else{
-         opt.parentElement.classList.add("border-wrong")
-         opt.nextElementSibling.classList.remove("hidden")
-         optedOption.forEach((option)=>{
-          if(option.textContent == rightAnswer.textContent){
-            option.parentElement.classList.add("border-right")
-            option.nextElementSibling.nextElementSibling.classList.remove("hidden")
-          }
-         })
-       }
+//       //answer checking through if else
+//       if ( opt.textContent == rightAnswer.textContent) {
+//         opt.parentElement.classList.add("border-right")
+//         opt.nextElementSibling.nextElementSibling.classList.remove("hidden")
+//         scoreCount++;
+//         localStorage.setItem("score" , scoreCount)
+//         console.log("score is " , scoreCount)
+//        } else{
+//          opt.parentElement.classList.add("border-wrong")
+//          opt.nextElementSibling.classList.remove("hidden")
+//          optedOption.forEach((option)=>{
+//           if(option.textContent == rightAnswer.textContent){
+//             option.parentElement.classList.add("border-right")
+//             option.nextElementSibling.nextElementSibling.classList.remove("hidden")
+//           }
+//          })
+//        }
 
-       isOptionSelected=true        // true value prevents multiple selection
+//        isOptionSelected=true        // true value prevents multiple selection
 
-    })
+//     })
     
-  })
+//   })
+// })
+options.forEach ((option) => {
+      option.addEventListener("click", ()=>{
+        console.log("hello")
+            if(isOptionSelected){
+              return;
+            }
+
+            option.classList.remove("border-right", "border-wrong") 
+
+
+            if(option.children[0].textContent== rightAnswer.textContent ){
+              console.log("right",  option.children[0].textContent)
+              option.classList.add("border-right")
+              option.children[2].classList.remove("hidden")
+              scoreCount++;
+              localStorage.setItem("score" , scoreCount);
+
+            } else {
+              console.log("wrong", option.children[0].textContent ,  rightAnswer.textContent)
+              option.classList.add("border-wrong")
+              option.children[1].classList.remove("hidden")
+            
+              options.forEach((option) =>{
+                if (option.children[0].textContent == rightAnswer.textContent){
+                  option.classList.add("border-right")
+                  option.children[2].classList.remove("hidden")
+                }
+              })
+            }
+
+            isOptionSelected=true
+      })
 })
+
 
 
 let isNextClicked = false    //to stop the timer from page 1
@@ -348,6 +385,37 @@ let isNextClicked = false    //to stop the timer from page 1
 
 
 
+let isTimerReload= false;
+// event for countdown 
+let stopCountDown
+next.addEventListener("click", ()=>{
+  
+  if(isOptionSelected){
+    isTimerReload=true} else{
+      return;
+    }
+
+  if(isNextTimerReload || isTimerReload){
+    countDownValue = 60
+    isTimerReload = false
+  }
+  
+  isNextTimerReload=false
+  clearInterval(stopCountDown)  //clear privous Q's countdown
+          stopCountDown = setInterval(() => {
+            countDownValue--
+            let formattedValue = String(countDownValue).padStart(2, "0")
+            localStorage.setItem ("countDownStored" , countDownValue)
+            countDown.textContent = formattedValue
+          if (countDownValue <= 0){
+            clearInterval(stopCountDown)           // terminate countdown after reach to 0
+          }
+          }, 1000);
+          
+        
+})
+
+
  //event for next question
 next.addEventListener("click" , ()=>{    
       isNextClicked = true           ////to stop the timer from page 1
@@ -370,22 +438,6 @@ next.addEventListener("click" , ()=>{
         isOptionSelected=false
  } 
 )
-
-// event for countdown 
-let stopCountDown
-next.addEventListener("click", ()=>{
-          countDownValue = 60
-          clearInterval(stopCountDown)  //clear privous Q's countdown
-          stopCountDown = setInterval(() => {
-            countDownValue--
-            let formattedValue = String(countDownValue).padStart(2, "0")
-            localStorage.setItem ("countDownStored" , countDownValue)
-            countDown.textContent = formattedValue
-          if (countDownValue <= 0){
-            clearInterval(stopCountDown)           // terminate countdown after reach to 0
-          }
-          }, 1000);
-})
 
 
 const pageBGColor = document.querySelector(".question-page")  // for background color
