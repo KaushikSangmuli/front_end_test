@@ -52,7 +52,7 @@ start.addEventListener( "click" , ()=>{
     pageBGColor.style.backgroundColor ="rgba(219, 173, 173, 1)"
     pageBGColor.style.transition = "60s"
   }, 1000);
-  
+
   countDownValue=60
   const stopCountDown1 = setInterval(() => {
     countDownValue--
@@ -287,42 +287,7 @@ const setOfQuestions = [
 
   // event on option selection
 isOptionSelected = false      // to prevent multiple selection
-// options.forEach((option) =>{
-//   optedOption.forEach((opt) => {
-//     opt.addEventListener("click", ()=>{
 
-//       if ( isOptionSelected){
-//           return;                           //if option selected directly end the event
-//       }
-
-//       options.forEach((option)=>{
-//         option.classList.remove("border-right", "border-wrong")   // previous Q's border removed
-//       })
-
-//       //answer checking through if else
-//       if ( opt.textContent == rightAnswer.textContent) {
-//         opt.parentElement.classList.add("border-right")
-//         opt.nextElementSibling.nextElementSibling.classList.remove("hidden")
-//         scoreCount++;
-//         localStorage.setItem("score" , scoreCount)
-//         console.log("score is " , scoreCount)
-//        } else{
-//          opt.parentElement.classList.add("border-wrong")
-//          opt.nextElementSibling.classList.remove("hidden")
-//          optedOption.forEach((option)=>{
-//           if(option.textContent == rightAnswer.textContent){
-//             option.parentElement.classList.add("border-right")
-//             option.nextElementSibling.nextElementSibling.classList.remove("hidden")
-//           }
-//          })
-//        }
-
-//        isOptionSelected=true        // true value prevents multiple selection
-
-//     })
-    
-//   })
-// })
 options.forEach ((option) => {
       option.addEventListener("click", ()=>{
         console.log("hello")
@@ -389,18 +354,17 @@ let isTimerReload= false;
 // event for countdown 
 let stopCountDown
 next.addEventListener("click", ()=>{
-  
+  debugger
   if(isOptionSelected){
-    isTimerReload=true} else{
-      return;
-    }
+    isTimerReload=true} 
 
   if(isNextTimerReload || isTimerReload){
     countDownValue = 60
     isTimerReload = false
+    isNextTimerReload=false
   }
   
-  isNextTimerReload=false
+  
   clearInterval(stopCountDown)  //clear privous Q's countdown
           stopCountDown = setInterval(() => {
             countDownValue--
