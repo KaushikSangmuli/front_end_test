@@ -1,0 +1,24 @@
+@media (max-width  : 660px) {
+    .quiz-button button{
+        margin-top: 100px;
+    }
+    .upper-div{
+        width: 90%;
+    }
+    .question-number p{
+        font-size: 1.2rem;
+    }
+    .question-div{
+        width: 90%;
+    }
+    #question-text{
+        font-size: 1.2rem;
+        margin-left: 40px;
+    }
+    .option-div{
+        width: 90%;
+    }
+    .option-text{
+        font-size: 1.2rem;
+    }
+}
